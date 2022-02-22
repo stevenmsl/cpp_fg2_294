@@ -13,13 +13,13 @@ using namespace std;
 
 bool Solution::canWin(string s)
 {
-  auto visited = unordered_map<string, bool>(false);
+  auto visited = unordered_set<string>();
   function<bool(string)> play = [&visited, &play](string x)
   {
-    if (x.size() < 2)
+    /* nothing to flip */
+    if (x.size() < 2 || visited.count(x) > 0)
       return false;
-    if (visited.count(x))
-      return visited[x];
+
     /* play flip games
        - flipping two positions at a time and pass
          the resulting string down to the subsequent
@@ -39,18 +39,16 @@ bool Solution::canWin(string s)
         x[i] = x[i + 1] = '-';
         /* opponent's turn */
         auto oppWon = play(x);
-        visited[x] = !oppWon;
+        visited.insert(x);
         /* you won */
-        if (visited[x])
-          return visited[x];
+        if (!oppWon)
+          return true;
         /* flip them back in case you need the next round */
         x[i] = x[i + 1] = '+';
       }
     }
 
     /* nothing left to flip */
-    visited[x] = false;
-
     return false;
   };
 

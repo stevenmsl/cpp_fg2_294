@@ -16,7 +16,7 @@ Explanation: The starting player can guarantee a win by flipping the middle "++"
 tuple<string, bool>
 testFixture1()
 {
-  return make_tuple(string("++++"), true);
+  return make_tuple(string("+++++"), true);
 }
 
 void test1()
