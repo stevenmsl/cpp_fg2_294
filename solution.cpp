@@ -11,13 +11,34 @@
 using namespace sol294;
 using namespace std;
 
+/*takeways
+  - you are playing many rounds of the game
+    starting with different combinations
+  - example: ++++
+    - you flipped ++++ to --++,
+      - from the opponent's pointof view he/she
+        is playing a game starting with --++
+        that's why we implement the recursive
+        calls to simulate this
+      - the opponent then flipped from --++
+        to ----
+      - you lost as nothing left to be flipped
+    - move on to the next round; you flipped
+      ++++ to +--+, and it continues
+
+  - the exit condition for the recursive calls
+    is that it will eventually running out of
+    things to flip guaranteed
+
+*/
+
 bool Solution::canWin(string s)
 {
   auto visited = unordered_set<string>();
   function<bool(string)> play = [&visited, &play](string x)
   {
     /* nothing to flip */
-    if (x.size() < 2 || visited.count(x) > 0)
+    if (x.size() < 2)
       return false;
 
     /* play flip games
@@ -39,7 +60,6 @@ bool Solution::canWin(string s)
         x[i] = x[i + 1] = '-';
         /* opponent's turn */
         auto oppWon = play(x);
-        visited.insert(x);
         /* you won */
         if (!oppWon)
           return true;
